@@ -1,0 +1,2 @@
+rootProject.name='Api-camerax-example'
+include ':app'
