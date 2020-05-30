@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="wottrich.github.io.api_camerax_example">
+
+    <!--  permissions  -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -8,14 +13,65 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup">
+
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:clearTaskOnLaunch="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- Register as a system camera app  -->
+            <intent-filter>
+                <!-- Para capturar uma imagem ou video e retorna ela -->
+                <action android:name="android.media.action.IMAGE_CAPTURE" />
+                <action android:name="android.media.action.VIDEO_CAMERA" />
+
+                <!-- Iniciar um aplicativo de câmera em mode de imagem extática -->
+                <action android:name="android.media.action.STILL_IMAGE_CAMERA" />
+
+                <!-- Define que o app pode ser iniciado com um tipo de category que está sendo setada com default -->
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- App links for http/s -->
+            <intent-filter android:autoVerify="true">
+                <!-- Exibir os dados recebidos para o usuario -->
+                <action android:name="android.intent.action.VIEW" />
+
+                <!-- Para receber intents implocitos o intent-filter precisa ter a category default -->
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- Category que lista o aplicativa se um intent for Browsable -->
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- uri -->
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="example.android.com" />
+                <data android:pathPattern="/camerax-example" />
+            </intent-filter>
+
+            <!-- notch support -->
+            <meta-data
+                android:name="android.notch_support"
+                android:value="true" />
+
         </activity>
+
+        <!-- FilterProvider para conseguirmos compartilhar fotos com outros apps -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 
 </manifest>
