@@ -1,6 +1,5 @@
 # CameraX Example
 This project is a simple example about how use `CameraX Android`.
-In it you will find
 
 ## Functionalities
 - Take photo
