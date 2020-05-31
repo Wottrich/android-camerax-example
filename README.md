@@ -2,7 +2,7 @@
 This project is a simple example about how use `CameraX Android`.
 
 ## Functionalities
-- Take photo
+- Take photo(Front/Back)
 - Save photo to the gallery
 - Gallery on app
 - Select a photo and delete or share them
