@@ -4,6 +4,8 @@ This project is a simple example about how use `CameraX Android`.
 ## Functionalities
 - Take photo
 - Save photo to the gallery
+- Gallery on app
+- Select a photo and delete or share them
 
 ## CameraX Dependencies and others things used (build.gradle)
 <details> <summary>Dependencies</summary>
