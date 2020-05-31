@@ -1,6 +1,7 @@
 package wottrich.github.io.api_camerax_example.view.fragments
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -42,29 +44,29 @@ class CameraFragment : Fragment() {
     private lateinit var container: ConstraintLayout
     private lateinit var viewFinder: PreviewView
 
-    //Operação de bloqueio de camera
+    /** Operação de bloqueio de camera */
     private lateinit var cameraExecutor: ExecutorService
 
-    //Diretorio que vamos salvar nossas fotos
+    /** Diretorio que vamos salvar nossas fotos */
     private lateinit var outputDirectory: File
 
-    //Solicitar ProcessCameraProvider usando ListenableFuture para poder dar bind do lifecycle
+    /** Solicitar ProcessCameraProvider usando ListenableFuture para poder dar bind do lifecycle */
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
 
-    //ProcessCameraProvider agrupa os useCase e os lifecycles
+    /** ProcessCameraProvider agrupa os useCase e os lifecycles */
     private var cameraProvider: ProcessCameraProvider? = null
 
-    //Preview onde vamos sertar o SurfaceProvider do nosso PreviewView
+    /** Preview onde vamos sertar o SurfaceProvider do nosso PreviewView */
     private var preview: Preview? = null
 
-    //Nossa instancia de camera
+    /** Nossa instancia de camera */
     private var camera: Camera? = null
 
-    //Usado para capturar a imagem
+    /** Usado para capturar a imagem */
     private var imageCapture: ImageCapture? = null
 
-    //Responsavel por fechar o proxy da image anterior
-    //para não haver problemas em outras images registradas futuramente
+    /** Responsavel por fechar o proxy da image anterior
+    para não haver problemas em outras images registradas futuramente*/
     private var imageAnalyzer: ImageAnalysis? = null
 
     override fun onResume() {
@@ -112,19 +114,35 @@ class CameraFragment : Fragment() {
         }
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        updateCameraSwitchButton()
+    }
+
     private fun listeners () {
 
-        container.findViewById<Button>(R.id.btn_take_photo).setOnClickListener {
+        container.findViewById<ImageButton>(R.id.img_btn_take_photo).setOnClickListener {
             //Tirando foto
             takePhoto()
         }
 
-        container.findViewById<Button>(R.id.btn_gallery).setOnClickListener {
+        container.findViewById<ImageButton>(R.id.img_btn_gallery).setOnClickListener {
             if (true == outputDirectory.listFiles()?.isNotEmpty()) {
                 Navigation.findNavController(requireActivity(), R.id.nav_fragment_container)
                     .navigate(CameraFragmentDirections.actionCameraToGallery(outputDirectory.absolutePath))
             }
         }
+
+        container.findViewById<ImageButton>(R.id.img_btn_switch_lens_facing)?.let {
+
+            it.isEnabled
+
+            it.setOnClickListener {
+                switchLensFacing()
+            }
+        }
+
 
     }
 
@@ -247,6 +265,26 @@ class CameraFragment : Fragment() {
 
         }
 
+    }
+
+    private fun switchLensFacing () {
+
+        lensFacing = if (CameraSelector.LENS_FACING_FRONT == lensFacing) {
+            CameraSelector.LENS_FACING_BACK
+        } else {
+            CameraSelector.LENS_FACING_FRONT
+        }
+
+        bindPreview()
+    }
+
+    private fun updateCameraSwitchButton() {
+        val switchCamerasButton = container.findViewById<ImageButton>(R.id.img_btn_switch_lens_facing)
+        try {
+            switchCamerasButton.isEnabled = hasBackCamera() && hasFrontCamera()
+        } catch (exception: CameraInfoUnavailableException) {
+            switchCamerasButton.isEnabled = false
+        }
     }
 
     /** Returns true if the device has an available back camera. False otherwise */
