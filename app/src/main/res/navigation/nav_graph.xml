@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/permission_fragment"
-    >
+    app:startDestination="@id/permission_fragment">
 
     <fragment
         android:id="@+id/permission_fragment"
-        android:name="wottrich.github.io.api_camerax_example.fragments.PermissionFragment"
+        android:name="wottrich.github.io.api_camerax_example.view.fragments.PermissionFragment"
         android:label="PermissionFragment">
 
         <action
@@ -21,8 +20,12 @@
 
     <fragment
         android:id="@+id/camera_fragment"
-        android:name="wottrich.github.io.api_camerax_example.fragments.CameraFragment"
+        android:name="wottrich.github.io.api_camerax_example.view.fragments.CameraFragment"
         android:label="CameraFragment">
+
+        <action
+            android:id="@+id/action_camera_to_gallery"
+            app:destination="@id/gallery_fragment" />
 
         <action
             android:id="@+id/action_camera_to_permission"
@@ -31,5 +34,33 @@
             app:popUpToInclusive="true"/>
 
     </fragment>
+
+    <fragment
+        android:id="@+id/gallery_fragment"
+        android:name="wottrich.github.io.api_camerax_example.view.fragments.GalleryFragment"
+        android:label="GalleryFragment">
+
+        <argument
+            android:name="root_directory"
+            app:argType="string"/>
+
+        <action
+            android:id="@+id/action_gallery_to_photo"
+            app:destination="@id/photo_fragment"
+            app:popUpTo="@id/gallery_fragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/photo_fragment"
+        android:name="wottrich.github.io.api_camerax_example.view.fragments.PhotoFragment"
+        android:label="PhotoFragment">
+
+        <argument
+            android:name="file_path"
+            app:argType="string"/>
+
+    </fragment>
+
 
 </navigation>

@@ -1,4 +1,4 @@
-package wottrich.github.io.api_camerax_example.fragments
+package wottrich.github.io.api_camerax_example.view.fragments
 
 import android.Manifest
 import android.content.Context
@@ -31,9 +31,15 @@ class PermissionFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         //Verificando se o app tem todas as permissões que ele precisa
-        if (!hasPermissions(requireContext())) {
+        if (!hasPermissions(
+                requireContext()
+            )
+        ) {
             //Solicitando as permissões necessárias
-            requestPermissions(PERMISSIONS_REQUIRED, PERMISSION_REQUEST_CODE)
+            requestPermissions(
+                PERMISSIONS_REQUIRED,
+                PERMISSION_REQUEST_CODE
+            )
         } else {
             //Se tivermos as permissões necessarias podemos prosseguir
             Navigation.findNavController(requireActivity(), R.id.nav_fragment_container)

@@ -3,4 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="take_photo">Take photo</string>
+    <string name="gallery">Gallery</string>
+    <string name="image_selected">image selected</string>
+    <string name="delete_photo">Delete photo</string>
+    <string name="share_photo">Share photo</string>
 </resources>
