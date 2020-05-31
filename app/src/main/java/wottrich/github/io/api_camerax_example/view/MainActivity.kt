@@ -1,9 +1,10 @@
-package wottrich.github.io.api_camerax_example
+package wottrich.github.io.api_camerax_example.view
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.FrameLayout
+import wottrich.github.io.api_camerax_example.R
 import wottrich.github.io.api_camerax_example.extensions.FLAGS_FULLSCREEN
 import java.io.File
 

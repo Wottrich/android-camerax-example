@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:icon="@drawable/ic_delete_24"
+        app:showAsAction="ifRoom"
+        android:id="@+id/itDelete"
+        android:title="@string/delete_photo" />
+
+    <item
+        android:icon="@drawable/ic_share"
+        app:showAsAction="ifRoom"
+        android:id="@+id/itShare"
+        android:title="@string/share_photo"/>
+
+</menu>

@@ -1,7 +1,6 @@
-package wottrich.github.io.api_camerax_example.fragments
+package wottrich.github.io.api_camerax_example.view.fragments
 
 import android.content.Intent
-import android.content.res.Configuration
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
@@ -20,11 +19,10 @@ import androidx.camera.view.PreviewView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.common.util.concurrent.ListenableFuture
-import wottrich.github.io.api_camerax_example.MainActivity
+import wottrich.github.io.api_camerax_example.view.MainActivity
 import wottrich.github.io.api_camerax_example.R
 import java.io.File
 import java.lang.Exception
-import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -72,7 +70,10 @@ class CameraFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (!PermissionFragment.hasPermissions(requireContext())) {
+        if (!PermissionFragment.hasPermissions(
+                requireContext()
+            )
+        ) {
             Navigation.findNavController(requireActivity(), R.id.nav_fragment_container)
                 .navigate(CameraFragmentDirections.actionCameraToPermission())
         }
@@ -118,6 +119,13 @@ class CameraFragment : Fragment() {
             takePhoto()
         }
 
+        container.findViewById<Button>(R.id.btn_gallery).setOnClickListener {
+            if (true == outputDirectory.listFiles()?.isNotEmpty()) {
+                Navigation.findNavController(requireActivity(), R.id.nav_fragment_container)
+                    .navigate(CameraFragmentDirections.actionCameraToGallery(outputDirectory.absolutePath))
+            }
+        }
+
     }
 
     private fun setupProcessCameraProvider () {
@@ -157,9 +165,13 @@ class CameraFragment : Fragment() {
         imageAnalyzer = ImageAnalysis.Builder()
             .build()
             .also {
-                it.setAnalyzer(cameraExecutor, LuminosityAnalyzer { luma ->
-                    Log.d(TAG, "Average luminosity: $luma")
-                })
+                it.setAnalyzer(cameraExecutor,
+                    LuminosityAnalyzer { luma ->
+                        Log.d(
+                            TAG,
+                            "Average luminosity: $luma"
+                        )
+                    })
             }
 
         try {
@@ -183,7 +195,12 @@ class CameraFragment : Fragment() {
 
         imageCapture?.let { imageCapture ->
 
-            val photoFile = createFile(outputDirectory, FILENAME, PHOTO_EXTENSION)
+            val photoFile =
+                createFile(
+                    outputDirectory,
+                    FILENAME,
+                    PHOTO_EXTENSION
+                )
 
             //Metadata da imagem capturada
             val metadata = Metadata().apply {
